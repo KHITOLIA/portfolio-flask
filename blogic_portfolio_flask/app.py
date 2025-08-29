@@ -1,45 +1,20 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, jsonify
-import os, json, datetime, psycopg2
-from psycopg2.extras import RealDictCursor
+import csv, os, json, datetime
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "change-me-in-production"  # required for flash messages
 app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
+app.config["DATA_DIR"] = os.path.join(app.root_path, "data")
 
-# Database connection string (Render me env var se set hoga)
-DATABASE_URL = os.getenv("DATABASE_URL")
+# Ensure data directory exists
+os.makedirs(app.config["DATA_DIR"], exist_ok=True)
 
-# --- Helper: Get DB Connection ---
-def get_db():
-    conn = psycopg2.connect(DATABASE_URL, sslmode="require")
-    return conn
+PROJECTS_JSON = os.path.join(app.config["DATA_DIR"], "projects.json")
+MESSAGES_CSV = os.path.join(app.config["DATA_DIR"], "messages.csv")
 
-# --- Create table if not exists ---
-def init_db():
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS messages (
-            id SERIAL PRIMARY KEY,
-            timestamp TIMESTAMP,
-            name TEXT,
-            email TEXT,
-            subject TEXT,
-            message TEXT,
-            ip TEXT
-        )
-    """)
-    conn.commit()
-    cur.close()
-    conn.close()
-
-init_db()
-
-# --- Dummy projects loader (JSON file optional) ---
 def load_projects():
-    projects_path = os.path.join(app.root_path, "data", "projects.json")
     try:
-        with open(projects_path, "r", encoding="utf-8") as f:
+        with open(PROJECTS_JSON, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception:
         return []
@@ -58,6 +33,7 @@ def api_projects():
 
 @app.route("/resume")
 def resume():
+    # If you add a real resume file to static/, update filename here
     resume_filename = "Tushar_T_Blogic_Resume.pdf"
     resume_path = os.path.join(app.root_path, "static", resume_filename)
     if os.path.exists(resume_path):
@@ -75,27 +51,35 @@ def contact():
         email = request.form.get("email", "").strip()
         subject = request.form.get("subject", "").strip()
         message = request.form.get("message", "").strip()
-        when = datetime.datetime.now()
-        ip = request.remote_addr
+        when = datetime.datetime.now().isoformat(timespec="seconds")
 
+        # Basic validation
         if not name or not email or not message:
             flash("Please fill in your name, email, and message.", "error")
             return redirect(url_for("contact"))
 
-        # Save to PostgreSQL
-        conn = get_db()
-        cur = conn.cursor()
-        cur.execute(
-            "INSERT INTO messages (timestamp, name, email, subject, message, ip) VALUES (%s, %s, %s, %s, %s, %s)",
-            (when, name, email, subject, message, ip)
-        )
-        conn.commit()
-        cur.close()
-        conn.close()
+        # Save to CSV (acts like a simple CRM)
+        is_new = not os.path.exists(MESSAGES_CSV)
+        with open(MESSAGES_CSV, "a", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            if is_new:
+                writer.writerow(["timestamp", "name", "email", "subject", "message", "ip"])
+            writer.writerow([when, name, email, subject, message, request.remote_addr])
 
         flash("Thanks! Your message was received. I'll get back to you shortly.", "success")
         return redirect(url_for("contact"))
     return render_template("contact.html")
+
+# Serve a simple sitemap
+@app.route("/sitemap.txt")
+def sitemap_txt():
+    return (
+        "https://example.com/\n"
+        "https://example.com/projects\n"
+        "https://example.com/about\n"
+        "https://example.com/contact\n"
+        "https://example.com/resume\n"
+    ), 200, {"Content-Type": "text/plain; charset=utf-8"}
 
 # Health check
 @app.route("/healthz")
