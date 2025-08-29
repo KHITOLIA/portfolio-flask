@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="max-w-6xl mx-auto px-4 py-14 grid md:grid-cols-3 gap-8 items-start">
+  <div class="md:col-span-2">
+    <h1 class="text-3xl md:text-4xl font-extrabold mb-4">About Me</h1>
+    <p class="text-slate-600 dark:text-slate-300 leading-7">
+      I'm Tushar, a Data Science & Gen‑AI Trainer at <strong>Blogic Software Technology Pvt Ltd</strong>.
+      I specialize in Python, statistics, machine learning, deep learning, and modern LLM stacks
+      (RAG, vector databases, prompt engineering, evaluation, safety).
+      I deliver hands‑on corporate trainings and build production‑grade AI apps.
+    </p>
+    <ul class="mt-6 space-y-3 list-disc list-inside text-slate-700 dark:text-slate-200">
+      <li>Designed curricula for Python, SQL, EDA, ML, DL, MLOps, and Gen‑AI.</li>
+      <li>Built chatbot & RAG apps with Flask, FastAPI, LangChain, and Ollama.</li>
+      <li>Deployed pipelines on AWS/GCP with CI/CD and monitoring.</li>
+    </ul>
+  </div>
+  <aside class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+    <h2 class="font-semibold mb-2">Credentials</h2>
+    <ul class="space-y-2 text-sm">
+      <li>🎓 B.Tech — Computer Science (placeholder)</li>
+      <li>🏅 Certifications — TensorFlow, AWS (placeholder)</li>
+      <li>🗣 Speaker — Meetups & tech events</li>
+    </ul>
+    <a href="{{ url_for('resume') }}" class="mt-4 inline-block text-sm px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-500">Download Resume</a>
+  </aside>
+</section>
+{% endblock %}

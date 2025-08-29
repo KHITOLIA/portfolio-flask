@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="max-w-6xl mx-auto px-4 py-14">
+  <h1 class="text-3xl md:text-4xl font-extrabold mb-2">Projects</h1>
+  <p class="text-slate-600 dark:text-slate-300 mb-8">A selection of training programs and AI builds.</p>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    {% for p in projects %}
+      <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <span>{{ p.category }}</span>
+          <span>•</span>
+          <span>{{ p.year }}</span>
+        </div>
+        <h3 class="mt-1 font-semibold text-lg">{{ p.title }}</h3>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">{{ p.summary }}</p>
+        <div class="mt-3 text-xs text-slate-500">{{ ", ".join(p.tech) }}</div>
+        {% if p.link %}
+          <a class="inline-block mt-4 text-sm text-indigo-600 hover:underline" target="_blank" href="{{ p.link }}">View</a>
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="text-slate-500">No projects found. Add some in <code>data/projects.json</code>.</div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

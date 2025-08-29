@@ -1,0 +1,55 @@
+[
+  {
+    "title": "Multi‑PDF RAG Chatbot (Flask + LangChain + Ollama)",
+    "summary": "Upload PDFs, index with FAISS, ask contextual questions with conversational memory.",
+    "category": "Gen‑AI / RAG",
+    "year": 2025,
+    "tech": [
+      "Flask",
+      "LangChain",
+      "Ollama",
+      "FAISS",
+      "HuggingFace"
+    ],
+    "link": ""
+  },
+  {
+    "title": "Corporate Training — Python to MLOps",
+    "summary": "End‑to‑end curriculum: Python, EDA, ML, DL, deployment, monitoring, CI/CD.",
+    "category": "Training",
+    "year": 2024,
+    "tech": [
+      "Python",
+      "scikit‑learn",
+      "TensorFlow",
+      "Docker",
+      "AWS"
+    ],
+    "link": ""
+  },
+  {
+    "title": "Invoice Extraction with RAG",
+    "summary": "Parse invoices, extract fields, verify with LLM, and export to structured formats.",
+    "category": "Gen‑AI / NLP",
+    "year": 2025,
+    "tech": [
+      "HuggingFace",
+      "LangChain",
+      "FastAPI",
+      "PostgreSQL"
+    ],
+    "link": ""
+  },
+  {
+    "title": "Streamlit AI Tutor",
+    "summary": "Conversational tutor with memory, quizzes, and code feedback for learners.",
+    "category": "EdTech",
+    "year": 2024,
+    "tech": [
+      "Streamlit",
+      "OpenAI/Ollama",
+      "SQLite"
+    ],
+    "link": ""
+  }
+]
